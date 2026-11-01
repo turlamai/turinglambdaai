@@ -16,8 +16,10 @@ Automotive embedded engineer — AUTOSAR, CAN/UDS, gPTP (IEEE 802.1AS). I also b
 
 Product pages: [jrtx.site](https://jrtx.site) · [All repositories](https://github.com/turlamai?tab=repositories)
 
+Documentation maintenance: [Product-first policy](DOCUMENTATION-POLICY.md) · [Audit coverage and acceptance gates](DOCUMENTATION-AUDIT.md)
+
 ## 中文
 
 汽车嵌入式工程师，方向 AUTOSAR、CAN/UDS、gPTP 时间同步；业余用 Racket 写 macOS/Windows/Linux 第一方原生桌面应用。
 
-如果你在找中文的汽车电子 / 嵌入式 / AI 工作流内容，欢迎关注公众号 **TuringLambdaAI**。
+文档维护依据：[产品文档规范](DOCUMENTATION-POLICY.md) · [审查覆盖范围与未完成验收](DOCUMENTATION-AUDIT.md)。
