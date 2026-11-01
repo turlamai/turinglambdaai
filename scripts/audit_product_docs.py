@@ -74,7 +74,7 @@ def audit_css(path: str, body: str, files: set[str]) -> tuple[int, list[str]]:
     issues: list[str] = []
     for match in CSS_URL.finditer(body):
         url = match.group(2).strip()
-        if not url or any(marker in url for marker in ("{{", "\${", "<%")):
+        if not url or any(marker in url for marker in ("{{", "${", "<%")):
             continue
         parts = urlsplit(url)
         if parts.scheme or parts.netloc or url.startswith(("/", "//", "#")):
