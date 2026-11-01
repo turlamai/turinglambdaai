@@ -76,7 +76,7 @@ The first-party site/source inventory lives in [docs/product-sites.json](docs/pr
 The standard-library-only [audit script](scripts/audit_product_docs.py) checks declared
 `docs/index.html` / `site/index.html` and detailed HTML guide pages for:
 
-- relative `href` / `src` assets that do not exist in the repository tree;
+- relative `href` / `src` assets and local CSS `url(...)` font/image assets referenced by inline styles or linked stylesheets that do not exist in the repository tree;
 - local and cross-page `#fragment` anchors that do not exist in the target HTML;
 - the legacy GitHub owner URL in these checked HTML documents.
 
