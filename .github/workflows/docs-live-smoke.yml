@@ -1,0 +1,38 @@
+name: Product deployed website smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "53 5 * * 1"
+  pull_request:
+    paths:
+      - "docs/product-sites.json"
+      - "scripts/audit_live_sites.py"
+      - "tests/test_live_sites.py"
+      - ".github/workflows/docs-live-smoke.yml"
+  push:
+    paths:
+      - "docs/product-sites.json"
+      - "scripts/audit_live_sites.py"
+      - "tests/test_live_sites.py"
+      - ".github/workflows/docs-live-smoke.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deployed-product-websites
+  cancel-in-progress: true
+
+jobs:
+  http-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline smoke contract tests
+        run: python3 -m unittest discover -s tests -p 'test_live_sites.py' -v
+      - name: Probe declared CNAME domains and source title parity
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.audit_live_sites
