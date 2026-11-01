@@ -70,6 +70,29 @@ Other repositories assessed at README level include Rivet, Commerce, Shuttle, Fi
 - **Applications:** Actual desktop installation, current UI, permissions, backup, update and failure/recovery walkthroughs remain untested here.
 - **Documentation drift:** Repeat link verification after landing page redesign or locale changes, particularly site/manual paths and `index.html#...` references.
 
+## Automated source-link regression check
+
+The first-party site/source inventory lives in [docs/product-sites.json](docs/product-sites.json).
+The standard-library-only [audit script](scripts/audit_product_docs.py) checks declared
+`docs/index.html` / `site/index.html` and detailed HTML guide pages for:
+
+- relative `href` / `src` assets that do not exist in the repository tree;
+- local and cross-page `#fragment` anchors that do not exist in the target HTML;
+- the legacy GitHub owner URL in these checked HTML documents.
+
+Run `python3 -m unittest discover -s tests -p 'test_docs_audit.py' -v` for
+offline unit tests, then `python3 scripts/audit_product_docs.py` for the
+current checked-in source. The scheduled [GitHub Actions workflow](.github/workflows/docs-audit.yml)
+runs weekly, on relevant PRs and on changes to its own inputs, and also supports
+manual dispatch. The script is read-only and checks only declared first-party
+public site source paths; it does not scan entire repository histories.
+
+**Do not mistake a green source-link check for a deployed site acceptance.**
+Remote URLs, published release aliases, images in CSS, JavaScript-generated links,
+binary-content validity, i18n interactions, native UI behavior and recovery all
+need separate verification. A GitHub Action schedule is subject to the repository
+being enabled, workflow permissions and GitHub scheduler behavior.
+
 ## Maintenance rule
 
 For every future product documentation change: run semantic editorial review under the policy, inspect the actual site/guide paths, verify both languages and navigation, check links, and test at least one observable user task. Treat this document as an audit ledger; append dated evidence instead of retroactively changing historical results.
