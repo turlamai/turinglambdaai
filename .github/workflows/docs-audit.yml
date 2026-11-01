@@ -4,6 +4,12 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 4 * * 1"
+  pull_request:
+    paths:
+      - "docs/product-sites.json"
+      - "scripts/audit_product_docs.py"
+      - "tests/test_docs_audit.py"
+      - ".github/workflows/docs-audit.yml"
   push:
     paths:
       - "docs/product-sites.json"
