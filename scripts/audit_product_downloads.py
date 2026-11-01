@@ -15,7 +15,7 @@ import re
 import sys
 from urllib.parse import unquote, urlsplit
 
-from audit_product_docs import github_get
+from scripts.audit_product_docs import github_get
 
 DIRECT = re.compile(r"^https://github\.com/([^/]+)/([^/]+)/releases/latest/download/([^/?#]+)$")
 
