@@ -1,0 +1,36 @@
+name: Product release download links
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "31 5 * * 1"
+  pull_request:
+    paths:
+      - "scripts/audit_product_downloads.py"
+      - "tests/test_download_audit.py"
+      - ".github/workflows/docs-downloads-audit.yml"
+  push:
+    paths:
+      - "scripts/audit_product_downloads.py"
+      - "tests/test_download_audit.py"
+      - ".github/workflows/docs-downloads-audit.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: product-download-links-audit
+  cancel-in-progress: true
+
+jobs:
+  release-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline tests
+        run: python3 -m unittest discover -s tests -p 'test_download_audit.py' -v
+      - name: Verify published download asset names
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.audit_product_downloads
