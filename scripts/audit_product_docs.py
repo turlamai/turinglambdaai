@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Source-only audit for first-party product site links.
 
-Checks checked-in assets, relative HTML links, fragment targets, and obsolete
+Checks checked-in HTML/CSS assets, relative links, fragment targets, and obsolete
 owner URLs. Does NOT claim that Pages was deployed, remote links work, or a
 released application matches the manual. Uses the GitHub API read-only.
 """
@@ -23,6 +23,7 @@ from urllib.request import Request, urlopen
 
 LEGACY_OWNER = re.compile(r"https?://(?:www\.)?github\.com/turinglambdaai/")
 TIMEOUT = 20
+CSS_URL = re.compile(r"""url\(\s*(['\"]?)(.*?)\1\s*\)""", re.IGNORECASE)
 
 
 class Page(HTMLParser):
@@ -30,9 +31,15 @@ class Page(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.ids: set[str] = set()
         self.references: list[tuple[str, str]] = []
+        self.styles: list[str] = []
+        self._in_style = False
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         properties = dict(attrs)
+        if tag == "style":
+            self._in_style = True
+        if properties.get("style"):
+            self.styles.append(properties["style"])
         identifier = properties.get("id")
         if identifier:
             self.ids.add(identifier)
@@ -46,6 +53,14 @@ class Page(HTMLParser):
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs)
 
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "style":
+            self._in_style = False
+
+    def handle_data(self, data: str) -> None:
+        if self._in_style:
+            self.styles.append(data)
+
 
 def parse_page(body: str) -> Page:
     page = Page()
@@ -53,13 +68,38 @@ def parse_page(body: str) -> Page:
     return page
 
 
-def audit_page(path: str, body: str, files: set[str], load_html) -> tuple[int, list[str]]:
+def audit_css(path: str, body: str, files: set[str]) -> tuple[int, list[str]]:
+    """Check local CSS url(...) assets relative to the containing CSS or HTML."""
+    checked = 0
+    issues: list[str] = []
+    for match in CSS_URL.finditer(body):
+        url = match.group(2).strip()
+        if not url or any(marker in url for marker in ("{{", "\${", "<%")):
+            continue
+        parts = urlsplit(url)
+        if parts.scheme or parts.netloc or url.startswith(("/", "//", "#")):
+            continue
+        if not parts.path:
+            continue
+        target = posixpath.normpath(posixpath.join(posixpath.dirname(path), unquote(parts.path)))
+        checked += 1
+        if target.startswith("../") or target == "..":
+            issues.append(f"{path}: CSS reference escapes repository: {url}")
+        elif target not in files:
+            issues.append(f"{path}: missing CSS asset {target} (from url({url!r}))")
+    return checked, issues
+
+
+def audit_page(path: str, body: str, files: set[str], load_html, load_css=None) -> tuple[int, list[str]]:
     """Return number of local references tested and actionable source errors."""
     current = parse_page(body)
     examined = 0
     problems: list[str] = []
     if LEGACY_OWNER.search(body):
         problems.append(f"{path}: legacy github.com/turinglambdaai URL")
+    css_count, css_issues = audit_css(path, "\n".join(current.styles), files)
+    examined += css_count
+    problems.extend(css_issues)
     for kind, url in current.references:
         if any(marker in url for marker in ("{{", "${", "<%")):
             continue  # templated URL, requires a runtime-specific review
@@ -87,6 +127,13 @@ def audit_page(path: str, body: str, files: set[str], load_html) -> tuple[int, l
                 continue
             if unquote(parts.fragment) not in target.ids:
                 problems.append(f"{path}: missing anchor #{parts.fragment} in {resolved}")
+        if kind == "href" and resolved.lower().endswith(".css") and load_css is not None:
+            try:
+                css_count, css_issues = audit_css(resolved, load_css(resolved), files)
+                examined += css_count
+                problems.extend(css_issues)
+            except Exception as exc:
+                problems.append(f"{path}: cannot read linked CSS {resolved}: {exc}")
     return examined, problems
 
 
@@ -125,7 +172,7 @@ def inspect_site(owner: str, spec: dict) -> tuple[str, int, list[str]]:
                 issues.append(f"{path}: declared page is missing")
                 continue
             try:
-                count, errors = audit_page(path, read_html(path), files, read_html)
+                count, errors = audit_page(path, read_html(path), files, read_html, read_html)
             except Exception as exc:
                 issues.append(f"{path}: unable to inspect source: {exc}")
                 continue
@@ -166,7 +213,7 @@ def main() -> int:
         else:
             print(f"PASS {name} ({checked} local references)")
     print(f"Checked {len(results)} sites, {total} relative references, {failures} source errors.")
-    print("Not covered: deployed site reachability, remote links, release assets, visual/UI behavior.")
+    print("Not covered: deployed reachability, remote URLs, release assets, CSS imports without url(), visual/UI behavior.")
     return 1 if failures else 0
 
 
