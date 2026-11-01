@@ -45,6 +45,31 @@ Other repositories assessed at README level include Rivet, Commerce, Shuttle, Fi
 4. **CI/release evidence:** Check each change's required GitHub Actions results and any Pages deployment logs before certifying site health. A successful GitHub merge is not itself a release or publishing guarantee.
 5. **Future drift:** When UI workflows change, update stable labels, expected outcomes, accessibility terms, platform notes, bilingual copy, and recovery instructions together. Review genuine dependencies individually rather than automatically deleting brand names.
 
+
+## Follow-up validation — 2026-11-01 (second pass)
+
+### Repository-wide README scan
+
+- Enumerated all **100 owner-visible repositories** and attempted a targeted source-text scan of each root `README.md` for legacy GitHub owner URLs, obvious unsolicited competitor-promotion phrases and embedded UI screenshot references.
+- **94 root READMEs were readable**. Six returned `NOT_FOUND` for the root file: `apply`, `graphics`, `hackdigest-server`, `racket-base64`, `racket-binary-search`, `racket-checkers`. Missing root READMEs do not imply missing documentation elsewhere.
+- The scan detected legacy owner URLs in **four archived repositories**: `deployer`, `makefile-template`, `octocrawler`, `simple`. `simple` also contains an archived theme screenshot. These are documented archival exceptions, **not** evidence that all history should be rewritten. No newly flagged unnecessary competitor pitch appeared in the targeted root-README patterns.
+- This was a **pattern-based scan**, not human semantic proofreading of all 100 repositories, and does not cover non-README files throughout all project trees.
+
+### Navigation and local resources
+
+- Reviewed homepage local resource references for **19 first-party site entry points**, attempting to resolve **37** HTML/CSS/JavaScript/image paths: **34 text resources were retrieved**, **two binary images** (`booklight/docs/assets/favicon.png`, `syncpilot/docs/icon.png`) could not be decoded by the text-only GitHub file reader, and one missing HTML manual target was confirmed. The binary decode failures are **not** proof of missing assets.
+- Fixed the missing FlashPilot navigation destination in [flashpilot#24](https://github.com/turlamai/flashpilot/pull/24): `site/guide.html` did not exist, so the nav now routes to verified English/Chinese `docs/USER-GUIDE` files according to language choice.
+- Checked cross-page `index.html#fragment` links from **12 detailed HTML manuals** to their parent homepages. Fixed a broken Taskly manual `#download` target in [taskly#97](https://github.com/turlamai/taskly/pull/97), linking to the existing `#release` section instead. No other missing cross-page fragment targets were found in that checked set.
+- Removed the remaining obsolete Payback homepage screenshot in [payback#46](https://github.com/turlamai/payback/pull/46), replacing it with a bilingual add-device/save/reopen verification flow.
+- The three fixes above were merged and inspected on source branches, but live deployment was **not confirmed**.
+
+### Remaining gates from this pass
+
+- **Live pages:** The public `*.jrtx.site` endpoints were not accessible through the available web fetcher or container network; this is a connectivity limitation, not proof of a deployment failure. Browser interaction in the actual deployed sites is still required.
+- **Images and downloads:** Binary image existence, all static assets, GitHub Release artifact aliases, redirect chains and HTTP status codes require independent validation. GitHub source files alone cannot prove the links work after deployment.
+- **Applications:** Actual desktop installation, current UI, permissions, backup, update and failure/recovery walkthroughs remain untested here.
+- **Documentation drift:** Repeat link verification after landing page redesign or locale changes, particularly site/manual paths and `index.html#...` references.
+
 ## Maintenance rule
 
 For every future product documentation change: run semantic editorial review under the policy, inspect the actual site/guide paths, verify both languages and navigation, check links, and test at least one observable user task. Treat this document as an audit ledger; append dated evidence instead of retroactively changing historical results.
