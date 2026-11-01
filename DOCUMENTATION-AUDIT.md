@@ -93,6 +93,19 @@ binary-content validity, i18n interactions, native UI behavior and recovery all
 need separate verification. A GitHub Action schedule is subject to the repository
 being enabled, workflow permissions and GitHub scheduler behavior.
 
+## Release attachment link acceptance
+
+The separate [download-link audit](scripts/audit_product_downloads.py) and its
+[GitHub Actions workflow](.github/workflows/docs-downloads-audit.yml) compare
+literal `releases/latest/download/<asset>` links in first-party site HTML with
+asset names on each repository's **latest stable GitHub Release**. The
+check runs independently of the source/anchor audit and supports manual dispatch.
+
+The latest stable release is not the newest commit or a prerelease. A passing
+match shows only that GitHub lists the named asset. It does not prove the
+download is usable, signed, runnable, installed successfully, or compatible
+with the visitor's machine. JavaScript-generated links, live deployed pages,
+release-overview links and binaries remain outside this check.
 ## Maintenance rule
 
 For every future product documentation change: run semantic editorial review under the policy, inspect the actual site/guide paths, verify both languages and navigation, check links, and test at least one observable user task. Treat this document as an audit ledger; append dated evidence instead of retroactively changing historical results.
