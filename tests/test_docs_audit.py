@@ -41,6 +41,30 @@ class SourceLinkAuditTests(unittest.TestCase):
         self.assertTrue(any("legacy github.com/turinglambdaai" in issue for issue in issues))
         self.assertTrue(any("escapes repository" in issue for issue in issues))
 
+    def test_inline_css_and_stylesheet_local_assets(self):
+        files = {"docs/index.html", "docs/styles.css", "docs/assets/hero.svg", "docs/fonts/inter.woff2"}
+        html = (
+            '<style>main {background: url("assets/hero.svg")}</style>'
+            '<link rel="stylesheet" href="styles.css">'
+            '<div style="background:url(#gradient)"></div>'
+        )
+        css = '@font-face {src:url("fonts/inter.woff2")} .remote{background:url(https://example.org/p.png)}'
+        count, issues = audit_page("docs/index.html", html, files, lambda _: "", lambda _: css)
+        self.assertEqual(count, 3)
+        self.assertEqual(issues, [])
+
+    def test_missing_font_and_missing_inline_background(self):
+        files = {"docs/index.html", "docs/styles.css"}
+        html = (
+            '<link rel="stylesheet" href="styles.css">'
+            '<style>.hero {background:url("images/missing.png")}</style>'
+        )
+        css = '@font-face {src: url(fonts/missing.woff2)}'
+        count, issues = audit_page("docs/index.html", html, files, lambda _: "", lambda _: css)
+        self.assertEqual(count, 3)
+        self.assertTrue(any("docs/images/missing.png" in error for error in issues))
+        self.assertTrue(any("docs/fonts/missing.woff2" in error for error in issues))
+
     def test_external_links_and_templates_are_ignored(self):
         files = {"docs/index.html"}
         body = (
