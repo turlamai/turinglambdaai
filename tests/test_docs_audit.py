@@ -54,5 +54,30 @@ class SourceLinkAuditTests(unittest.TestCase):
         self.assertEqual(issues, [])
 
 
+    def test_regression_missing_flashpilot_guide(self):
+        files = {"site/index.html"}
+        _, issues = audit_page(
+            "site/index.html", '<a href="guide.html">Manual</a>', files, lambda _: ""
+        )
+        self.assertTrue(any("missing file site/guide.html" in issue for issue in issues))
+
+    def test_regression_taskly_download_anchor(self):
+        files = {"docs/index.html", "docs/manual.html"}
+        pages = {"docs/index.html": '<section id="release"></section>'}
+        _, old_issues = audit_page(
+            "docs/manual.html",
+            '<a href="index.html#download">Download</a>',
+            files,
+            pages.__getitem__,
+        )
+        _, fixed_issues = audit_page(
+            "docs/manual.html",
+            '<a href="index.html#release">Downloads</a>',
+            files,
+            pages.__getitem__,
+        )
+        self.assertTrue(any("missing anchor #download" in issue for issue in old_issues))
+        self.assertEqual(fixed_issues, [])
+
 if __name__ == "__main__":
     unittest.main()
