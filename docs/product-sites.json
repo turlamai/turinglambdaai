@@ -1,0 +1,157 @@
+{
+  "owner": "turlamai",
+  "sites": [
+    {
+      "repo": "taskly",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "manual.html"
+      ]
+    },
+    {
+      "repo": "booklight",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "movebit",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "manual.html"
+      ]
+    },
+    {
+      "repo": "autarx",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "regexmate",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "syncpilot",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "glaze",
+      "root": "docs",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "hackdigest",
+      "root": "docs",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "gptp-studio",
+      "root": "docs",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "publy",
+      "root": "docs",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "fulcrum",
+      "root": "site",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "podlens",
+      "root": "site",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "payback",
+      "root": "site",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "permit",
+      "root": "site",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "flashpilot",
+      "root": "site",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "relaypilot",
+      "root": "site",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "keel",
+      "root": "site",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "pitboard",
+      "root": "site",
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "repo": "keyward",
+      "root": "site",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    },
+    {
+      "repo": "threadly",
+      "root": "site",
+      "pages": [
+        "index.html",
+        "guide.html"
+      ]
+    }
+  ]
+}
