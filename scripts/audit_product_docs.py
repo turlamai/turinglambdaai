@@ -21,7 +21,7 @@ from urllib.parse import quote, unquote, urlsplit
 from urllib.request import Request, urlopen
 
 
-LEGACY_OWNER = re.compile(r"https?://(?:www\\.)?github\\.com/turinglambdaai/")
+LEGACY_OWNER = re.compile(r"https?://(?:www\.)?github\.com/turinglambdaai/")
 TIMEOUT = 20
 
 
