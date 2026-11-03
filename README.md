@@ -7,7 +7,7 @@ Automotive embedded engineer — AUTOSAR, CAN/UDS, gPTP (IEEE 802.1AS). I also b
 ### Selected projects
 
 - **[taskly](https://github.com/turlamai/taskly)** — cross-platform task manager; native SwiftUI / WinUI 3 / GTK4, one behavioral contract
-- **[flashpilot](https://github.com/turlamai/flashpilot)** — AI-native ECU flashing: declarative flash plans, UDS over ISO-TP/CAN and DoIP, fingerprint gate and failure evidence — the focused successor to BenchPilot
+- **[flashpilot](https://github.com/turlamai/flashpilot)** — AI-native ECU flashing with declarative flash plans, UDS over ISO-TP/CAN and DoIP, fingerprint verification, and actionable failure evidence
 - **[autarx](https://github.com/turlamai/autarx)** — AUTOSAR integration workbench for OEM deliveries: semantic diff, ECU impact analysis, reference tracing; MCP interface for AI agents
 - **[podlens](https://github.com/turlamai/podlens)** — cross-platform podcast player that transcribes, translates and summarizes English episodes with your own LLM key
 - **[gptp-studio](https://github.com/turlamai/gptp-studio)** — Linux-native gPTP (IEEE 802.1AS) debugging studio with a doctor-first workflow
@@ -16,10 +16,6 @@ Automotive embedded engineer — AUTOSAR, CAN/UDS, gPTP (IEEE 802.1AS). I also b
 
 Product pages: [jrtx.site](https://jrtx.site) · [All repositories](https://github.com/turlamai?tab=repositories)
 
-Documentation maintenance: [Product-first policy](DOCUMENTATION-POLICY.md) · [Audit coverage and acceptance gates](DOCUMENTATION-AUDIT.md)
-
 ## 中文
 
 汽车嵌入式工程师，方向 AUTOSAR、CAN/UDS、gPTP 时间同步；业余用 Racket 写 macOS/Windows/Linux 第一方原生桌面应用。
-
-文档维护依据：[产品文档规范](DOCUMENTATION-POLICY.md) · [审查覆盖范围与未完成验收](DOCUMENTATION-AUDIT.md)。
