@@ -18,9 +18,11 @@ on:
 permissions:
   contents: read
 
+# Every main/scheduled run is distinct; only superseded PR revisions cancel.
+# GitHub also replaces pending runs with the same concurrency group.
 concurrency:
-  group: product-download-links-audit
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   release-links:
